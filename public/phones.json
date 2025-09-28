@@ -12320,8 +12320,6 @@
       "image": "https://fdn2.gsmarena.com/vv/bigpic/microsoft-surface.jpg",
       "specs": {
         "Technology": "No cellular connectivity",
-        // "2G bands": "CDMA 850 / 900 / 1800 / 1900",
-        // "3G bands": "CDMA2000 1XEV-DO",
         "Announced": "2012, October",
         "Status": "Discontinued",
         "Dimensions": "274.6 x 172 x 9.4 mm",
@@ -12346,8 +12344,6 @@
       "image": "https://fdn2.gsmarena.com/vv/bigpic/microsoft-surface-2.jpg",
       "specs": {
         "Technology": "No cellular connectivity",
-        // "2G bands": "CDMA 850 / 900 / 1800 / 1900",
-        // "3G bands": "CDMA2000 1XEV-DO",
         "Announced": "2013, September",
         "Status": "Discontinued",
         "Dimensions": "274.6 x 172.5 x 8.9 mm",
@@ -12610,7 +12606,6 @@
         "Technology": "GSM / HSPA",
         "2G bands": "GSM 850 / 900 / 1800 / 1900",
         "3G bands": "HSDPA 900 / 2100",
-        // "4G bands": "1, 3, 7, 8, 20",
         "Announced": "2015, March",
         "Status": "Discontinued",
         "Dimensions": "157.9 x 81.5 x 9 mm",
@@ -12637,7 +12632,6 @@
         "Technology": "GSM / HSPA",
         "2G bands": "GSM 850 / 900 / 1800 / 1900",
         "3G bands": "HSDPA 900 / 2100",
-        // "4G bands": "1, 3, 7, 8, 20",
         "Announced": "2015, March",
         "Status": "Discontinued",
         "Dimensions": "157.9 x 81.5 x 9 mm",
