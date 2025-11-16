@@ -4175,6 +4175,34 @@
       }
     },
     {
+      "phone_name": "Oneplus 15",
+      "brand": "Oneplus",
+      "image": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-15.jpg",
+      "specs": {
+        "Technology": "GSM / HSPA / LTE / 5G",
+        "2G bands": "GSM 850 / 900 / 1800 / 1900",
+        "3G bands": "HSDPA 850 / 900 / 1700 / 1900 / 2100",
+        "4G bands": "1, 3, 4, 5, 8, 28, 34, 38, 39, 40, 41",
+        "5G bands": "1, 3, 5, 8, 28, 40, 41, 78",
+        "Announced": "2025, October",
+        "Status": "Available",
+        "Dimensions": "161.4 x 76.7 x 8.1 mm",
+        "Weight": "211 g or 215 g",
+        "Display": "6.78 inches LTPO AMOLED, 1272 x 2772 pixels",
+        "OS": "Android 16, Oxygen OS 16",
+        "CPU": "4.6 GHz",
+        "Chipset": "Snapdragon 8 Elite Gen 5",
+        "Memory": "256/512 GB 1 TB",
+        "RAM": "12/16 GB",
+        "Main Camera": "50 MP + 50 MP (Telephoto) + 50 MP (UW)",
+        "Video back": "8K 30fps 4K 30/60/120fps 1080p 30/60fps",
+        "Selfie Camera": "32 MP",
+        "Video front": "4K 30/60fps 1080p 30/60fps",
+        "Battery": "Si/C 7300 mAh, non-removable",
+        "Price": "About 950 EUR"
+      }
+    },
+    {
       "phone_name": "Google Pixel",
       "brand": "Google",
       "image": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel.jpg",
