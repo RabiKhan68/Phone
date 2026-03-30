@@ -14,13 +14,21 @@ function App() {
   const searchPhone = async (query) => {
     setSearchQuery(query);
 
+    // 🔥 Prevent unnecessary load
+    if (!query || query.length < 2) {
+      setPhones([]);
+      return;
+    }
+
     try {
       const res = await fetch('/phones.json');
       const data = await res.json();
 
-      const filtered = data.phones.filter(phone =>
-        phone.phone_name.toLowerCase().includes(query.toLowerCase())
-      );
+      const filtered = data.phones
+        .filter(phone =>
+          phone.phone_name.toLowerCase().includes(query.toLowerCase())
+        )
+        .slice(0, 12); // 🔥 LIMIT results (VERY IMPORTANT)
 
       setPhones(filtered);
     } catch (error) {
@@ -51,15 +59,30 @@ function App() {
           <div className="phone-grid">
             {phones.length > 0 ? (
               phones.map((phone, index) => (
-                <PhoneCard key={index} phone={phone} query={searchQuery} />
+                <PhoneCard
+                  key={index}
+                  phone={phone}
+                  query={searchQuery}
+                  onView={() => setSelectedPhone(phone)} // ✅ FIXED
+                />
               ))
             ) : (
-              <p className="empty">Search for phones to display results</p>
+              <p className="empty">
+                🔍 Start typing to search phones...
+              </p>
             )}
           </div>
 
         </main>
       </div>
+
+      {/* MODAL */}
+      {selectedPhone && (
+        <PhoneModal
+          phone={selectedPhone}
+          onClose={() => setSelectedPhone(null)}
+        />
+      )}
 
       {/* FOOTER */}
       <Footer />

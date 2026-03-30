@@ -1,14 +1,34 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export default function PhoneModal({ phone, onClose }) {
   if (!phone) return null;
 
+  // 🔥 ESC key close
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleEsc);
+
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
+  // 🔥 Click outside close
+  const handleOverlayClick = (e) => {
+    if (e.target.classList.contains("modal-overlay")) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={handleOverlayClick}>
 
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        initial={{ scale: 0.85, opacity: 0, y: 40 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
         className="modal-box"
       >
         {/* CLOSE BUTTON */}
@@ -17,17 +37,15 @@ export default function PhoneModal({ phone, onClose }) {
         </button>
 
         {/* IMAGE */}
-        <img
-          src={phone.image}
-          alt={phone.phone_name}
-          className="modal-img"
-        />
+        <div className="modal-img-container">
+          <img src={phone.image} alt={phone.phone_name} />
+        </div>
 
         {/* INFO */}
-        <h2>{phone.phone_name}</h2>
+        <h2 className="modal-title">{phone.phone_name}</h2>
         <p className="brand">{phone.brand}</p>
 
-        {/* FULL SPECS */}
+        {/* SPECS */}
         <div className="specs">
           {phone.specs ? (
             Object.entries(phone.specs).map(([key, value]) => (
@@ -36,7 +54,7 @@ export default function PhoneModal({ phone, onClose }) {
               </p>
             ))
           ) : (
-            <p>No specs available</p>
+            <p>No specifications available</p>
           )}
         </div>
 
