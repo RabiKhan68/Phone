@@ -1,15 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
+import "./PhoneCard.css";
 
 function PhoneCard({ phone, query, onView }) {
 
-  // 🔥 Restore highlight feature
+  // ✅ FIXED highlight (no regex.test bug)
   const highlightMatch = (text, query) => {
     if (!query) return text;
-    const regex = new RegExp(`(${query})`, "gi");
 
-    return text.split(regex).map((part, i) =>
-      regex.test(part) ? (
+    const regex = new RegExp(`(${query})`, "gi");
+    const parts = text.split(regex);
+
+    return parts.map((part, i) =>
+      part.toLowerCase() === query.toLowerCase() ? (
         <mark key={i} className="highlight">
           {part}
         </mark>
@@ -22,12 +25,20 @@ function PhoneCard({ phone, query, onView }) {
   return (
     <motion.div
       whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 200 }}
       className="card"
+      onClick={onView} // 🔥 whole card clickable
     >
       {/* IMAGE */}
       <div className="card-img">
-        <img src={phone.image} alt={phone.phone_name} />
+        <img
+          src={phone.image}
+          alt={phone.phone_name}
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/150";
+          }}
+        />
       </div>
 
       {/* INFO */}
@@ -38,7 +49,14 @@ function PhoneCard({ phone, query, onView }) {
 
         <p className="card-brand">{phone.brand}</p>
 
-        <button onClick={onView} className="view-btn">
+        {/* BUTTON */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // 🔥 prevent double trigger
+            onView();
+          }}
+          className="view-btn"
+        >
           View Details
         </button>
       </div>

@@ -10,11 +10,11 @@ function App() {
   const [phones, setPhones] = useState([]);
   const [selectedPhone, setSelectedPhone] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const searchPhone = async (query) => {
     setSearchQuery(query);
 
-    // 🔥 Prevent unnecessary load
     if (!query || query.length < 2) {
       setPhones([]);
       return;
@@ -28,7 +28,7 @@ function App() {
         .filter(phone =>
           phone.phone_name.toLowerCase().includes(query.toLowerCase())
         )
-        .slice(0, 12); // 🔥 LIMIT results (VERY IMPORTANT)
+        .slice(0, 12);
 
       setPhones(filtered);
     } catch (error) {
@@ -41,16 +41,18 @@ function App() {
     <div className="app-container">
 
       {/* NAVBAR */}
-      <Navbar />
+      <Navbar openSidebar={() => setIsSidebarOpen(true)} />
 
-      {/* MAIN LAYOUT */}
-      <div className="main-layout">
+      {/* SIDEBAR (overlay style) */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
-        {/* SIDEBAR */}
-        <Sidebar />
+      {/* CONTENT */}
+      <main className="content">
 
-        {/* CONTENT */}
-        <main className="content">
+        <div className="content-wrapper">
 
           <h1 className="page-title">📱 Phone Arena Dashboard</h1>
 
@@ -63,7 +65,7 @@ function App() {
                   key={index}
                   phone={phone}
                   query={searchQuery}
-                  onView={() => setSelectedPhone(phone)} // ✅ FIXED
+                  onView={() => setSelectedPhone(phone)}
                 />
               ))
             ) : (
@@ -73,8 +75,9 @@ function App() {
             )}
           </div>
 
-        </main>
-      </div>
+        </div>
+
+      </main>
 
       {/* MODAL */}
       {selectedPhone && (

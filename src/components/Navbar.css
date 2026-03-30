@@ -1,6 +1,6 @@
 import "./Navbar.css";
 
-export default function Navbar({openSidebar}) {
+export default function Navbar() {
   return (
     <header className="navbar">
 
@@ -26,13 +26,6 @@ export default function Navbar({openSidebar}) {
         <div className="profile">
           👤
         </div>
-
-        <button
-        className="menu-btn"
-        onClick={() => setIsSidebarOpen(true)}
-        >
-            ☰
-        </button>
 
       </div>
 
