@@ -30,11 +30,26 @@ body {
   margin: 0 auto;
 }
 
-/* TITLE */
+/* PageTitle.css */
 .page-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 2.5rem;       /* Big title */
+  font-weight: 700;        /* Bold */
+  color: #1f2937;          /* Dark gray text */
+  text-align: center;      /* Centered */
+  margin: 2rem 0;          /* Top & bottom spacing */
+  letter-spacing: 1px;     /* Slight spacing between letters */
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;       /* Slightly smaller on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.75rem;    /* Even smaller on very small screens */
+  }
 }
 
 /* GRID */
@@ -42,11 +57,5 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 20px;
-}
-
-/* EMPTY STATE */
-.empty {
   text-align: center;
-  color: #6b7280;
-  margin-top: 20px;
 }

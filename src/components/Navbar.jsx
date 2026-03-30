@@ -1,12 +1,12 @@
 import "./Navbar.css";
 
-export default function Navbar({openSidebar}) {
+export default function Navbar({ openSidebar }) {
   return (
     <header className="navbar">
 
       {/* LEFT: LOGO */}
       <div className="nav-left">
-        <h1 className="logo">📱 PhoneArena</h1>
+        <h1 className="logo">PhoneArena</h1>
       </div>
 
       {/* RIGHT: ACTIONS */}
@@ -29,7 +29,7 @@ export default function Navbar({openSidebar}) {
 
         <button
         className="menu-btn"
-        onClick={() => setIsSidebarOpen(true)}
+        onClick={openSidebar}
         >
             ☰
         </button>

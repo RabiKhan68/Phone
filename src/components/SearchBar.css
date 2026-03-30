@@ -1,41 +1,43 @@
-/* CONTAINER */
+/* ----------------- CONTAINER ----------------- */
 .search-container {
   display: flex;
   justify-content: center;
   margin-bottom: 25px;
+  padding: 0 10px; /* add padding on small screens */
 }
 
-/* BOX */
+/* ----------------- SEARCH BOX ----------------- */
 .search-box {
   display: flex;
   align-items: center;
 
   width: 340px;
-  padding: 8px 12px;
+  max-width: 100%; /* ensures it fits mobile screens */
+  padding: 8px 16px;
 
   border-radius: 25px;
 
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(10px);
 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 /* FOCUS EFFECT */
 .search-box:focus-within {
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
 }
 
-/* ICON */
+/* ----------------- ICON ----------------- */
 .search-icon {
   margin-right: 8px;
-  font-size: 14px;
+  font-size: 16px; /* slightly bigger for readability */
   color: #6b7280;
 }
 
-/* INPUT */
+/* ----------------- INPUT ----------------- */
 .search-input {
   flex: 1;
   border: none;
@@ -45,16 +47,44 @@
   color: #111827;
 }
 
-/* CLEAR BUTTON */
+/* ----------------- CLEAR BUTTON ----------------- */
 .clear-btn {
   border: none;
   background: transparent;
   cursor: pointer;
   color: #6b7280;
   font-size: 14px;
-  transition: 0.2s;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .clear-btn:hover {
   color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* ----------------- MOBILE RESPONSIVE ----------------- */
+@media (max-width: 768px) {
+  .search-box {
+    width: 60%; /* almost full width on mobile */
+    padding: 8px 12px;
+  }
+
+  .search-icon {
+    font-size: 14px;
+  }
+
+  .search-input {
+    font-size: 13px;
+  }
+
+  .clear-btn {
+    font-size: 13px;
+  }
+}
+
+/* ----------------- TABLET / SMALL DESKTOP ----------------- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .search-box {
+    width: 280px; /* slightly smaller for tablets */
+  }
 }

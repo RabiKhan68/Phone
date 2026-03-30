@@ -1,4 +1,4 @@
-/* OVERLAY */
+/* ----------------- OVERLAY ----------------- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -6,91 +6,123 @@
   width: 100%;
   height: 100%;
 
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45); /* slightly softer overlay */
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
 }
 
-/* MODAL BOX */
+/* Fade in overlay */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ----------------- MODAL BOX ----------------- */
 .modal-box {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.98); /* more opaque for readability */
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
-  padding: 20px;
+  padding: 25px;
   border-radius: 16px;
-
   width: 90%;
-  max-width: 550px;
-
+  max-width: 500px; /* slightly narrower for better mobile fit */
   position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(-15px);
+  opacity: 0;
+  animation: slideIn 0.3s forwards;
 }
 
-/* IMAGE */
+/* Slide in animation */
+@keyframes slideIn {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ----------------- IMAGE ----------------- */
 .modal-img-container {
-  height: 200px;
+  height: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 .modal-img-container img {
   max-height: 100%;
+  max-width: 100%;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-/* TITLE */
+.modal-img-container img:hover {
+  transform: scale(1.05);
+}
+
+/* ----------------- TITLE & BRAND ----------------- */
 .modal-title {
   font-size: 20px;
   font-weight: 600;
-  margin-top: 10px;
+  margin-bottom: 6px;
+  color: #111827;
+  text-align: center;
+  word-break: break-word;
 }
 
-/* BRAND */
 .brand {
   color: #6b7280;
-  margin-bottom: 10px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
-/* SPECS */
+/* ----------------- SPECS ----------------- */
 .specs {
-  max-height: 260px;
+  max-height: 220px;
   overflow-y: auto;
   margin-top: 10px;
+  padding-right: 6px; /* padding for scrollbar */
 }
 
-/* SPEC ITEM */
 .spec-item {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  padding: 4px 0;
+  padding: 6px 0;
   border-bottom: 1px solid #eee;
 }
 
-/* KEY */
 .spec-key {
   font-weight: 500;
   color: #374151;
 }
 
-/* VALUE */
 .spec-value {
   color: #111827;
 }
 
-/* NO SPECS */
 .no-specs {
   color: #9ca3af;
   font-style: italic;
+  text-align: center;
+  padding: 10px 0;
 }
 
-/* CLOSE BUTTON */
+/* ----------------- CLOSE BUTTON ----------------- */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -101,13 +133,52 @@
   color: white;
 
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
 
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .close-btn:hover {
   background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* ----------------- MOBILE RESPONSIVE ----------------- */
+@media (max-width: 768px) {
+  .modal-box {
+    padding: 18px;
+    width: 70%;
+  }
+
+  .modal-title {
+    font-size: 18px;
+  }
+
+  .brand {
+    font-size: 13px;
+  }
+
+  .modal-img-container {
+    height: 150px;
+  }
+
+  .spec-item {
+    font-size: 13px;
+  }
+}
+
+/* ----------------- SMOOTH SCROLLBAR ----------------- */
+.specs::-webkit-scrollbar {
+  width: 6px;
+}
+
+.specs::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5);
+  border-radius: 3px;
+}
+
+.specs::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.7);
 }

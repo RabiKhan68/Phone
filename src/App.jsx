@@ -5,6 +5,7 @@ import PhoneModal from './components/PhoneModal';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
+import './App.css';
 
 function App() {
   const [phones, setPhones] = useState([]);
@@ -54,7 +55,7 @@ function App() {
 
         <div className="content-wrapper">
 
-          <h1 className="page-title">📱 Phone Arena Dashboard</h1>
+          <h1 className="page-title">Phone Arena Dashboard</h1>
 
           <SearchBar onSearch={searchPhone} />
 
@@ -68,11 +69,7 @@ function App() {
                   onView={() => setSelectedPhone(phone)}
                 />
               ))
-            ) : (
-              <p className="empty">
-                🔍 Start typing to search phones...
-              </p>
-            )}
+            ) : (null)}
           </div>
 
         </div>
