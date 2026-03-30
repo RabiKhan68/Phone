@@ -1,0 +1,70 @@
+/* PhonesPage.css */
+
+/* Container styling */
+.phones-page-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Page title */
+.phones-page-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #f9fafb; /* light gray */
+}
+
+/* Brand filter dropdown */
+.brand-filter {
+  margin-bottom: 20px;
+}
+
+.brand-filter label {
+  margin-right: 10px;
+  font-weight: 500;
+  color: #f9fafb;
+}
+
+.brand-filter select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  background-color: #1f2937; /* dark gray background */
+  color: #f9fafb; /* text color */
+  font-size: 0.95rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.brand-filter select:hover,
+.brand-filter select:focus {
+  border-color: #3b82f6; /* blue on focus/hover */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Phone grid */
+.phone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+/* No phones message */
+.phone-grid p {
+  color: #f9fafb;
+  font-size: 1rem;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brand-filter select {
+    width: 100%;
+  }
+
+  .phone-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
+}
