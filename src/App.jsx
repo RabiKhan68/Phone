@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import SearchBar from './components/SearchBar';
 import PhoneCard from './components/PhoneCard';
+import PhoneModal from './components/PhoneModal';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import Footer from './components/Footer';
 
 function App() {
   const [phones, setPhones] = useState([]);
+  const [selectedPhone, setSelectedPhone] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Search handler
   const searchPhone = async (query) => {
-    if (!query) return;
+    setSearchQuery(query);
 
     try {
-      const res = await fetch('/phones.json'); // Make sure phones.json exists in public/
+      const res = await fetch('/phones.json');
       const data = await res.json();
 
       const filtered = data.phones.filter(phone =>
@@ -25,20 +30,40 @@ function App() {
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-r from-red-500 to-pink-500 text-white p-6'>
-      <h1 className='text-4xl font-bold text-center mb-8 drop-shadow-lg'>Phone Arena</h1>
-      
-      <SearchBar onSearch={searchPhone} />
+    <div className="app-container">
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10'>
-        {phones.map((phone, index) => (
-          <PhoneCard
-            key={index}
-            phone={phone}
-            query="" // You can optionally pass the search term
-          />
-        ))}
+      {/* NAVBAR */}
+      <Navbar />
+
+      {/* MAIN LAYOUT */}
+      <div className="main-layout">
+
+        {/* SIDEBAR */}
+        <Sidebar />
+
+        {/* CONTENT */}
+        <main className="content">
+
+          <h1 className="page-title">📱 Phone Arena Dashboard</h1>
+
+          <SearchBar onSearch={searchPhone} />
+
+          <div className="phone-grid">
+            {phones.length > 0 ? (
+              phones.map((phone, index) => (
+                <PhoneCard key={index} phone={phone} query={searchQuery} />
+              ))
+            ) : (
+              <p className="empty">Search for phones to display results</p>
+            )}
+          </div>
+
+        </main>
       </div>
+
+      {/* FOOTER */}
+      <Footer />
+
     </div>
   );
 }
