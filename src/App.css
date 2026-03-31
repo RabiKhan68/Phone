@@ -13,6 +13,7 @@ body {
 
 /* APP CONTAINER */
 .app-container {
+  font-weight: bold;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
