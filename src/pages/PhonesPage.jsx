@@ -3,7 +3,7 @@ import PhoneCard from "../components/PhoneCard";
 import PhoneModal from "../components/PhoneModal";
 import "./PhonesPage.css";
 
-export default function PhonesPage() {
+export default function PhonesPage({ showToast }) {
   const [phones, setPhones] = useState([]);
   const [filteredPhones, setFilteredPhones] = useState([]);
   const [selectedPhone, setSelectedPhone] = useState(null);
@@ -50,7 +50,7 @@ export default function PhonesPage() {
   return (
     <div className="phones-page-container">
     <div style={{ padding: "20px" }}>
-      <h1>📱 Phones</h1>
+      <h1 style={{color: "black"}}>Phones</h1>
 
       {/* Brand dropdown */}
       <div className="brand-filter">
@@ -79,6 +79,7 @@ export default function PhonesPage() {
               phone={phone}
               query={brandQuery}
               onView={() => setSelectedPhone(phone)}
+              showToast={showToast}
             />
           ))
         ) : (

@@ -1,4 +1,5 @@
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 export default function Navbar({ openSidebar }) {
   return (
@@ -6,7 +7,13 @@ export default function Navbar({ openSidebar }) {
 
       {/* LEFT: LOGO */}
       <div className="nav-left">
-        <h1 className="logo">PhoneArena</h1>
+        <h1 className="logo">
+          <img
+            src="/phone.png"
+            alt="PhoneArena Logo"
+          />
+          <span className="logo-text">Phone Arena</span>
+          </h1>
       </div>
 
       {/* RIGHT: ACTIONS */}
@@ -19,8 +26,12 @@ export default function Navbar({ openSidebar }) {
         />
 
         <div className="nav-icons">
-          <span className="icon">🔔</span>
-          <span className="icon">⚙️</span>
+          <Link to="/favorites">
+            <span className="icon">❤️</span>
+          </Link>
+          <Link to="/settings">
+            <span className="icon">⚙️</span>
+          </Link>
         </div>
 
         <div className="profile">

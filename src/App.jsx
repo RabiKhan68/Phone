@@ -8,6 +8,8 @@ import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import Settings from './pages/Settings';
 import PhonesPage from './pages/PhonesPage';
+import FavoritesPage from './pages/FavoritesPage';
+import Toast from './components/Toast';
 import './App.css';
 
 function App() {
@@ -15,6 +17,23 @@ function App() {
   const [selectedPhone, setSelectedPhone] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  const showToast = (message, type = "success") => {
+    setToast({show: false, message: "", type});
+
+    setTimeout(() => {
+      setToast({show: true, message, type});
+    }, 50);
+
+    setTimeout(() => {
+      setToast(prev => ({ ...prev, show: false }));
+    }, 2500);
+  };
 
   const searchPhone = async (query) => {
     setSearchQuery(query);
@@ -74,6 +93,7 @@ function App() {
                           phone={phone}
                           query={searchQuery}
                           onView={() => setSelectedPhone(phone)}
+                          showToast={showToast}
                         />
                       ))
                     ) : (
@@ -85,10 +105,10 @@ function App() {
             />
 
             {/* Phones Page */}
-            <Route path="/phones" element={<PhonesPage />} />
+            <Route path="/phones" element={<PhonesPage showToast={showToast} />} />
 
             {/* Favorites Page */}
-            <Route path="/favorites" element={<p>Favorites Page</p>} />
+            <Route path="/Favorites" element={<FavoritesPage showToast={showToast} />} />
 
             {/* Settings Page */}
             <Route path="/settings" element={<Settings />} />
@@ -104,6 +124,12 @@ function App() {
           onClose={() => setSelectedPhone(null)}
         />
       )}
+
+      <Toast
+      show={toast.show}
+      message={toast.message}
+      type={toast.type}
+      />
 
       {/* FOOTER */}
       <Footer />

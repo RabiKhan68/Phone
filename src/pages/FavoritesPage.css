@@ -1,0 +1,42 @@
+/* Container */
+.favorites-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Title */
+.favorites-container h1 {
+  color: #f9fafb;
+  margin-bottom: 20px;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* Wrapper */
+.fav-card-wrapper {
+  position: relative;
+}
+
+/* Remove button */
+.remove-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+  border: none;
+  border-radius: 8px;
+
+  background: #ef4444;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+}

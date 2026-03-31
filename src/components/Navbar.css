@@ -23,12 +23,27 @@
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.5px;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.logo-text {
+  color: white;
 }
 
 /* RIGHT SECTION */
