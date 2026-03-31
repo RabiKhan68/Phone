@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
-        <p className="footer-text">&copy; 2026 Phone Dashboard | Built by Rabi Khan</p>
+        <p className="footer-text" style={{color: "white"}}>&copy; 2026 Phone Dashboard | Built by Rabi Khan</p>
         <div className="footer-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
