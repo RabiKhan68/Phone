@@ -49,6 +49,7 @@ function App() {
 
       const filtered = data.phones
         .filter(phone =>
+          phone.phone_name &&
           phone.phone_name.toLowerCase().includes(query.toLowerCase())
         )
         .slice(0, 12);
