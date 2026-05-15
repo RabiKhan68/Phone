@@ -1,89 +1,178 @@
-/* ----------------- FOOTER ----------------- */
-.footer {
-  background-color: #1f2937;   /* dark gray */
-  color: #d1d5db;              /* light gray text */
-  padding: 1.5rem 2rem;
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;           /* prevent horizontal scroll */
+/* ─── Design Tokens ──────────────────────────────────────────────────────────── */
+:root {
+  --footer-bg:          #0d0f14;
+  --footer-border:      #1e2330;
+  --footer-text:        #8b92a5;
+  --footer-text-strong: #e2e6f0;
+  --footer-accent-1:    #3b82f6;
+  --footer-accent-2:    #6366f1;
+  --footer-accent-3:    #8b5cf6;
+  --footer-link:        #8b92a5;
+  --footer-link-hover:  #e2e6f0;
+  --footer-font-body:   "DM Sans", "Segoe UI", sans-serif;
+  --footer-radius:      0px;
+  --footer-transition:  0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* CONTAINER */
+/* ─── Shell ───────────────────────────────────────────────────────────────────── */
+.footer {
+  position: relative;
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--footer-border);
+  font-family: var(--footer-font-body);
+  overflow: hidden;
+}
+
+/* ─── Tri-colour accent bar ───────────────────────────────────────────────────── */
+.footer-accent {
+  display: flex;
+  height: 3px;
+  width: 100%;
+}
+
+.footer-accent span {
+  flex: 1;
+}
+
+.footer-accent span:nth-child(1) { background: var(--footer-accent-1); }
+.footer-accent span:nth-child(2) { background: var(--footer-accent-2); }
+.footer-accent span:nth-child(3) { background: var(--footer-accent-3); }
+
+/* ─── Container ───────────────────────────────────────────────────────────────── */
 .footer-container {
   display: flex;
-  flex-direction: column;       /* stack items vertically by default */
   align-items: center;
-  justify-content: center;
-  max-width: 1000px;            /* restrict width so it’s not too stretched */
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  max-width: 1200px;
   margin: 0 auto;
-  gap: 0.75rem;
-  padding: 0 15px;              /* small horizontal padding for mobile */
-  box-sizing: border-box;
+  padding: 1.25rem 2rem;
 }
 
-/* FOOTER TEXT */
+/* ─── Brand / copyright ───────────────────────────────────────────────────────── */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.footer-logo {
+  font-size: 1.1rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.5));
+}
+
 .footer-text {
-  font-size: 0.875rem;
-  text-align: center;
-  line-height: 1.4;
-  max-width: 90%;               /* prevent stretching on small screens */
-  word-wrap: break-word;
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--footer-text);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 
-/* FOOTER LINKS */
+.footer-name {
+  font-weight: 600;
+  color: var(--footer-text-strong);
+}
+
+.footer-divider {
+  color: var(--footer-border);
+  margin: 0 0.1em;
+}
+
+.footer-author {
+  background: linear-gradient(
+    90deg,
+    var(--footer-accent-1),
+    var(--footer-accent-3)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+/* ─── Navigation links ────────────────────────────────────────────────────────── */
 .footer-links {
   display: flex;
-  flex-direction: row;
-  gap: 1.5rem;
-  flex-wrap: wrap;              /* wrap links on small screens */
-  justify-content: center;
-  max-width: 100%;              /* ensure it doesn’t overflow */
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.1rem;
 }
 
-.footer-links a {
-  color: #d1d5db;
+.footer-link {
+  position: relative;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--footer-link);
   text-decoration: none;
-  font-size: 0.875rem;
-  transition: color 0.2s ease-in-out;
+  border-radius: 4px;
+  transition:
+    color       var(--footer-transition),
+    background  var(--footer-transition);
 }
 
-.footer-links a:hover {
-  color: #ffffff;
+.footer-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.08),
+    rgba(139, 92, 246, 0.08)
+  );
+  opacity: 0;
+  transition: opacity var(--footer-transition);
 }
 
-/* ---------------- MOBILE RESPONSIVE ---------------- */
-@media (max-width: 768px) {
-  .footer {
-    padding: 1rem 1rem;
-  }
+.footer-link:hover {
+  color: var(--footer-link-hover);
+}
 
+.footer-link:hover::after {
+  opacity: 1;
+}
+
+/* Separator dots between links */
+.footer-links .footer-link + .footer-link::before {
+  content: "·";
+  position: absolute;
+  left: -2px;
+  color: var(--footer-border);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
   .footer-container {
-    flex-direction: column;     /* stack text and links vertically */
-    gap: 0.5rem;
-    max-width: 95%;             /* reduce width on mobile */
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+    gap: 0.75rem;
   }
 
   .footer-text {
-    font-size: 0.8rem;
-    max-width: 95%;             /* prevent text overflow */
+    white-space: normal;
   }
 
   .footer-links {
-    gap: 0.8rem;
-    flex-direction: column;     /* stack links vertically for small screens */
-    align-items: center;
-    width: 100%;
+    gap: 0.2rem;
   }
 
-  .footer-links a {
-    font-size: 0.8rem;
-    text-align: center;
-    width: 100%;                /* full width for easier touch */
+  .footer-links .footer-link + .footer-link::before {
+    display: none;
   }
 }
 
-/* ---------------- GLOBAL PREVENT SCROLL ---------------- */
-body, html {
-  overflow-x: hidden;           /* disable horizontal scroll */
-  max-width: 100vw;
+/* ─── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .footer-link,
+  .footer-link::after {
+    transition: none;
+  }
 }

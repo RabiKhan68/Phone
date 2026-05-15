@@ -1,42 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PhoneCard from "../components/PhoneCard";
 import PhoneModal from "../components/PhoneModal";
 import "./FavoritesPage.css";
-import { color } from "framer-motion";
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const STORAGE_KEY_FAVORITES = "favorites";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const loadFavorites = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_FAVORITES)) || [];
+  } catch {
+    return [];
+  }
+};
+
+const saveFavorites = (favorites) => {
+  localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favorites));
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function FavoritesPage({ showToast }) {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites]       = useState(loadFavorites);
   const [selectedPhone, setSelectedPhone] = useState(null);
 
+  // Keep localStorage in sync whenever favorites change
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(stored);
-  }, []);
+    saveFavorites(favorites);
+  }, [favorites]);
 
-  const removeFavorite = (phoneName) => {
-    const updated = favorites.filter(
-      (p) => p.phone_name !== phoneName
-    );
-    setFavorites(updated);
-    localStorage.setItem("favorites", JSON.stringify(updated));
-  };
+  const removeFavorite = useCallback((phoneName) => {
+    setFavorites((prev) => prev.filter((p) => p.phone_name !== phoneName));
+  }, []);
 
   return (
     <div className="favorites-container">
-      <h1 style={{ color: "black", fontSize: "24px", textAlign: "center"}}>Favorite Phones</h1>
+      <h1 className="page-title">Favorite Phones</h1>
 
       {favorites.length === 0 ? (
         <p className="empty">No favorites yet.</p>
       ) : (
         <div className="phone-grid">
-          {favorites.map((phone, index) => (
-            <div key={index} className="fav-card-wrapper">
+          {favorites.map((phone) => (
+            <div key={phone.phone_name} className="fav-card-wrapper">
               <PhoneCard
                 phone={phone}
                 onView={() => setSelectedPhone(phone)}
                 showToast={showToast}
               />
-
               <button
                 className="remove-btn"
                 onClick={() => removeFavorite(phone.phone_name)}

@@ -1,179 +1,274 @@
-import { useEffect, useState } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import SearchBar from './components/SearchBar';
-import PhoneCard from './components/PhoneCard';
-import PhoneModal from './components/PhoneModal';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import Footer from './components/Footer';
-import Settings from './pages/Settings';
-import PhonesPage from './pages/PhonesPage';
+import SearchBar     from './components/SearchBar';
+import PhoneCard     from './components/PhoneCard';
+import PhoneModal    from './components/PhoneModal';
+import Navbar        from './components/Navbar';
+import Sidebar       from './components/Sidebar';
+import Footer        from './components/Footer';
+import Settings      from './pages/Settings';
+import PhonesPage    from './pages/PhonesPage';
 import FavoritesPage from './pages/FavoritesPage';
-import Toast from './components/Toast';
+import ComparePhones from './components/ComparePhones';
+import Reviews       from './components/Reviews';
+import Toast         from './components/Toast';
 import './App.css';
 
-function App() {
-  const [phones, setPhones] = useState([]);
-  const [selectedPhone, setSelectedPhone] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-  const [toast, setToast] = useState({
-    show: false,
-    message: "",
-    type: "success",
-  });
+const SEARCH_MIN_LENGTH        = 2;
+const SEARCH_MAX_RESULTS       = 12;
+const TRENDING_MAX_RESULTS     = 10;
+const TOAST_DURATION_MS        = 2500;
+const TOAST_RESET_DELAY_MS     = 50;
+const STORAGE_KEY_SEARCH_STATS = 'searchStats';
 
-  const [searchStats, setSearchStats] = useState(
-    JSON.parse(localStorage.getItem("searchStats")) || {}
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const loadSearchStats = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY_SEARCH_STATS)) || {};
+  } catch {
+    return {};
+  }
+};
+
+const saveSearchStats = (stats) =>
+  localStorage.setItem(STORAGE_KEY_SEARCH_STATS, JSON.stringify(stats));
+
+const fetchPhones = async () => {
+  const res = await fetch('/phones.json');
+  if (!res.ok) throw new Error(`Failed to fetch phones: ${res.status}`);
+  const data = await res.json();
+  return data.phones ?? [];
+};
+
+const filterPhones = (phones, query) => {
+  const lower = query.toLowerCase();
+  return phones
+    .filter((p) => (p.phone_name ?? '').toLowerCase().includes(lower))
+    .slice(0, SEARCH_MAX_RESULTS);
+};
+
+const rankByCount = (stats, limit) =>
+  Object.entries(stats)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, limit);
+
+const RANK_MEDALS = ['🥇', '🥈', '🥉'];
+const rankLabel   = (index) => RANK_MEDALS[index] ?? `${index + 1}.`;
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function TrendingList({ stats }) {
+  const trending = useMemo(
+    () => rankByCount(stats, TRENDING_MAX_RESULTS),
+    [stats]
   );
 
-  // ✅ Toast
-  const showToast = (message, type = "success") => {
-    setToast({ show: false, message: "", type });
+  if (trending.length === 0) return null;
 
-    setTimeout(() => {
-      setToast({ show: true, message, type });
-    }, 50);
+  return (
+    <section className="trending-section" aria-label="Trending phones">
+      <h2 className="section-title">
+        <span className="section-title-icon" aria-hidden="true">🔥</span>
+        Trending by Users
+      </h2>
+      <div className="trending-list">
+        {trending.map(([name, count], index) => (
+          <div key={name} className="trending-item">
+            <span className="trending-rank" aria-label={`Rank ${index + 1}`}>
+              {rankLabel(index)}
+            </span>
+            <span className="trending-name">{name}</span>
+            <span className="trending-count" aria-label={`${count} searches`}>
+              🔍 {count}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-    setTimeout(() => {
-      setToast(prev => ({ ...prev, show: false }));
-    }, 2500);
-  };
+function PhoneGrid({ phones, searchQuery, onView, showToast }) {
+  if (phones.length === 0) {
+    return (
+      <div className="empty-state" aria-live="polite">
+        <span className="empty-icon" aria-hidden="true">🔍</span>
+        <p className="empty-text">Start searching for phones…</p>
+        <p className="empty-sub">Type at least 2 characters to see results</p>
+      </div>
+    );
+  }
 
-  // ✅ Search
-  const searchPhone = async (query) => {
+  return (
+    <div className="phone-grid" aria-label="Search results">
+      {phones.map((phone) => (
+        <PhoneCard
+          key={phone.phone_name}
+          phone={phone}
+          query={searchQuery}
+          onView={() => onView(phone)}
+          showToast={showToast}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ─── Hooks ────────────────────────────────────────────────────────────────────
+
+function useToast() {
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const showToast = useCallback((message, type = 'success') => {
+    setToast({ show: false, message: '', type });
+    const resetId = setTimeout(
+      () => setToast({ show: true, message, type }),
+      TOAST_RESET_DELAY_MS
+    );
+    const hideId = setTimeout(
+      () => setToast((prev) => ({ ...prev, show: false })),
+      TOAST_DURATION_MS
+    );
+    return () => { clearTimeout(resetId); clearTimeout(hideId); };
+  }, []);
+
+  return { toast, showToast };
+}
+
+function useAllPhones() {
+  const [allPhones, setAllPhones] = useState([]);
+
+  useEffect(() => {
+    fetchPhones()
+      .then(setAllPhones)
+      .catch((err) => console.error('Failed to load all phones:', err));
+  }, []);
+
+  return allPhones;
+}
+
+function usePhoneSearch() {
+  const [phones,      setPhones]      = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchStats, setSearchStats] = useState(loadSearchStats);
+
+  const searchPhone = useCallback(async (query) => {
     setSearchQuery(query);
 
-    if (!query || query.length < 2) {
+    if (!query || query.length < SEARCH_MIN_LENGTH) {
       setPhones([]);
       return;
     }
 
     try {
-      const res = await fetch('/phones.json');
-      const data = await res.json();
-
-      const lowerQuery = query.toLowerCase();
-
-      const filtered = data.phones
-        .filter(phone =>
-          (phone.phone_name || "").toLowerCase().includes(lowerQuery)
-        )
-        .slice(0, 12);
-
+      const allPhones = await fetchPhones();
+      const filtered  = filterPhones(allPhones, query);
       setPhones(filtered);
 
-      // 🔥 Track searches
       if (filtered.length > 0) {
-        const updatedStats = { ...searchStats };
-
-        filtered.forEach(phone => {
-          const name = phone.phone_name;
-          if (!name) return;
-
-          updatedStats[name] = (updatedStats[name] || 0) + 1;
+        setSearchStats((prev) => {
+          const next = { ...prev };
+          filtered.forEach(({ phone_name }) => {
+            if (phone_name) next[phone_name] = (next[phone_name] ?? 0) + 1;
+          });
+          saveSearchStats(next);
+          return next;
         });
-
-        setSearchStats(updatedStats);
-        localStorage.setItem("searchStats", JSON.stringify(updatedStats));
       }
-
-    } catch (error) {
-      console.error("Failed to load phone data:", error);
+    } catch (err) {
+      console.error('Failed to load phone data:', err);
       setPhones([]);
     }
-  };
+  }, []);
 
-  // ✅ Get Top 10 Trending
-  const getTrendingPhones = () => {
-    return Object.entries(searchStats)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10);
-  };
+  return { phones, searchQuery, searchStats, searchPhone };
+}
+
+// ─── Dashboard ────────────────────────────────────────────────────────────────
+
+function Dashboard({ phones, searchQuery, searchStats, onSearch, onView, showToast }) {
+  return (
+    <div className="dashboard">
+      <div className="dashboard-hero">
+        <h1 className="page-title">
+          Phone<strong>Arena</strong>
+          <span className="page-title-badge">Dashboard</span>
+        </h1>
+        <p className="page-subtitle">
+          Search, compare, and discover the latest smartphones.
+        </p>
+        <SearchBar onSearch={onSearch} />
+      </div>
+
+      <PhoneGrid
+        phones={phones}
+        searchQuery={searchQuery}
+        onView={onView}
+        showToast={showToast}
+      />
+
+      <TrendingList stats={searchStats} />
+    </div>
+  );
+}
+
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
+export default function App() {
+  const [selectedPhone, setSelectedPhone] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const { toast, showToast }                              = useToast();
+  const { phones, searchQuery, searchStats, searchPhone } = usePhoneSearch();
+  const allPhones                                         = useAllPhones();
 
   return (
     <div className="app-container">
+      {/* Background mesh */}
+      <div className="app-bg" aria-hidden="true">
+        <div className="app-bg-blob app-bg-blob--1" />
+        <div className="app-bg-blob app-bg-blob--2" />
+        <div className="app-bg-blob app-bg-blob--3" />
+      </div>
 
-      {/* NAVBAR */}
       <Navbar openSidebar={() => setIsSidebarOpen(true)} />
 
-      {/* SIDEBAR */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* MAIN CONTENT */}
-      <main className="content">
+      <main className="content" id="main-content">
         <div className="content-wrapper">
-
           <Routes>
-
-            {/* DASHBOARD */}
             <Route
               path="/"
               element={
-                <>
-                  <h1 className="page-title">Phone Arena Dashboard</h1>
-
-                  <SearchBar onSearch={searchPhone} />
-
-                  {/* SEARCH RESULTS */}
-                  <div className="phone-grid">
-                    {phones.length > 0 ? (
-                      phones.map((phone, index) => (
-                        <PhoneCard
-                          key={index}
-                          phone={phone}
-                          query={searchQuery}
-                          onView={() => setSelectedPhone(phone)}
-                          showToast={showToast}
-                        />
-                      ))
-                    ) : (
-                      <p className="empty" style={{color: "black"}}>🔍 Start searching phones...</p>
-                    )}
-                  </div>
-
-                  {/* 🔥 TRENDING SECTION */}
-                  <h2 className="section-title">🔥 Trending by Users</h2>
-
-                  <div className="trending-list">
-                    {getTrendingPhones().map(([name, count], index) => (
-                      <div key={index} className="trending-item">
-
-                        <span className="rank">
-                          {index === 0 && "🥇"}
-                          {index === 1 && "🥈"}
-                          {index === 2 && "🥉"}
-                          {index > 2 && `${index + 1}.`}
-                        </span>
-
-                        <span>{name}</span>
-
-                        <span className="popularity">
-                          🔍 {count}
-                        </span>
-
-                      </div>
-                    ))}
-                  </div>
-                </>
+                <Dashboard
+                  phones={phones}
+                  searchQuery={searchQuery}
+                  searchStats={searchStats}
+                  onSearch={searchPhone}
+                  onView={setSelectedPhone}
+                  showToast={showToast}
+                />
               }
             />
-
-            {/* OTHER PAGES */}
-            <Route path="/phones" element={<PhonesPage showToast={showToast} />} />
+            <Route path="/phones"    element={<PhonesPage    showToast={showToast} />} />
             <Route path="/favorites" element={<FavoritesPage showToast={showToast} />} />
+            <Route
+              path="/compare"
+              element={<ComparePhones phones={allPhones} showToast={showToast} />}
+            />
+            <Route
+              path="/reviews"
+              element={<Reviews phones={allPhones} showToast={showToast} />}
+            />
             <Route path="/settings" element={<Settings />} />
-
           </Routes>
-
         </div>
       </main>
 
-      {/* MODAL */}
       {selectedPhone && (
         <PhoneModal
           phone={selectedPhone}
@@ -181,17 +276,9 @@ function App() {
         />
       )}
 
-      {/* TOAST */}
-      <Toast
-        show={toast.show}
-        message={toast.message}
-        type={toast.type}
-      />
+      <Toast show={toast.show} message={toast.message} type={toast.type} />
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );
 }
-
-export default App;

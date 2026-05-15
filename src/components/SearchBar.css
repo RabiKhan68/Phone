@@ -1,90 +1,169 @@
-/* ----------------- CONTAINER ----------------- */
-.search-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
-  padding: 0 10px; /* add padding on small screens */
+/* ─── Design Tokens (mirrors Footer, Navbar, PhoneCard, PhoneModal) ─────────── */
+:root {
+  --search-bg:          #111318;
+  --search-bg-focus:    #13161d;
+  --search-border:      #1e2330;
+  --search-border-focus:#2a3050;
+  --search-text:        #e2e6f0;
+  --search-placeholder: #4b5268;
+  --search-icon-color:  #4b5268;
+  --search-icon-focus:  #6366f1;
+  --search-accent-1:    #3b82f6;
+  --search-accent-2:    #6366f1;
+  --search-accent-3:    #8b5cf6;
+  --search-font:        "DM Sans", "Segoe UI", sans-serif;
+  --search-transition:  0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --search-radius:      8px;
 }
 
-/* ----------------- SEARCH BOX ----------------- */
+/* ─── Wrapper ─────────────────────────────────────────────────────────────────── */
+.search-container {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  font-family: var(--search-font);
+}
+
+/* ─── Search box ──────────────────────────────────────────────────────────────── */
 .search-box {
+  position: relative;
   display: flex;
   align-items: center;
-
-  width: 340px;
-  max-width: 100%; /* ensures it fits mobile screens */
-  padding: 8px 16px;
-
-  border-radius: 25px;
-
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-
-  transition: all 0.3s ease;
+  background: var(--search-bg);
+  border: 1px solid var(--search-border);
+  border-radius: var(--search-radius);
+  transition:
+    border-color  var(--search-transition),
+    background    var(--search-transition),
+    box-shadow    var(--search-transition);
 }
 
-/* FOCUS EFFECT */
+/* Gradient underline — appears on focus-within */
+.search-box::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  border-radius: 99px;
+  background: linear-gradient(
+    90deg,
+    var(--search-accent-1),
+    var(--search-accent-2),
+    var(--search-accent-3)
+  );
+  opacity: 0;
+  transition: opacity var(--search-transition), left var(--search-transition), right var(--search-transition);
+}
+
 .search-box:focus-within {
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+  background: var(--search-bg-focus);
+  border-color: var(--search-border-focus);
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* ----------------- ICON ----------------- */
+.search-box:focus-within::after {
+  opacity: 1;
+  left: 4%;
+  right: 4%;
+}
+
+/* ─── Icon ────────────────────────────────────────────────────────────────────── */
 .search-icon {
-  margin-right: 8px;
-  font-size: 16px; /* slightly bigger for readability */
-  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.6rem 0 0.9rem;
+  color: var(--search-icon-color);
+  font-size: 1rem;
+  pointer-events: none;
+  flex-shrink: 0;
+  transition: color var(--search-transition);
 }
 
-/* ----------------- INPUT ----------------- */
+.search-box:focus-within .search-icon {
+  color: var(--search-icon-focus);
+}
+
+/* ─── Input ───────────────────────────────────────────────────────────────────── */
 .search-input {
   flex: 1;
+  padding: 0.7rem 0.5rem 0.7rem 0;
+  font-family: var(--search-font);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--search-text);
+  background: transparent;
   border: none;
   outline: none;
-  font-size: 14px;
-  background: transparent;
-  color: #111827;
+  caret-color: var(--search-accent-2);
+
+  /* Remove browser default clear button */
+  -webkit-appearance: none;
 }
 
-/* ----------------- CLEAR BUTTON ----------------- */
+.search-input::placeholder {
+  color: var(--search-placeholder);
+  font-weight: 400;
+}
+
+/* Remove IE/Edge ✕ */
+.search-input::-ms-clear       { display: none; }
+/* Remove Chrome search clear */
+.search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+/* ─── Clear button ────────────────────────────────────────────────────────────── */
 .clear-btn {
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  margin-right: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--search-placeholder);
   background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
   cursor: pointer;
-  color: #6b7280;
-  font-size: 14px;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color         var(--search-transition),
+    border-color  var(--search-transition),
+    background    var(--search-transition);
 }
 
 .clear-btn:hover {
-  color: #ef4444;
-  transform: scale(1.1);
+  color: var(--search-text);
+  border-color: var(--search-border-focus);
+  background: rgba(59, 130, 246, 0.07);
 }
 
-/* ----------------- MOBILE RESPONSIVE ----------------- */
-@media (max-width: 768px) {
-  .search-box {
-    width: 60%; /* almost full width on mobile */
-    padding: 8px 12px;
-  }
-
-  .search-icon {
-    font-size: 14px;
+/* ─── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .search-container {
+    max-width: 100%;
   }
 
   .search-input {
-    font-size: 13px;
+    font-size: 0.9rem;   /* slightly larger for mobile tap targets */
+    padding: 0.65rem 0.4rem 0.65rem 0;
   }
 
-  .clear-btn {
-    font-size: 13px;
+  .search-icon {
+    padding-left: 0.75rem;
   }
 }
 
-/* ----------------- TABLET / SMALL DESKTOP ----------------- */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .search-box {
-    width: 280px; /* slightly smaller for tablets */
+/* ─── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .search-box,
+  .search-box::after,
+  .search-icon,
+  .clear-btn {
+    transition: none;
   }
 }

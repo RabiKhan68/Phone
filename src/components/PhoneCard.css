@@ -1,120 +1,216 @@
-/* ----------------- CARD ----------------- */
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  cursor: pointer;
+/* ─── Design Tokens (mirrors Footer & Navbar) ────────────────────────────────── */
+:root {
+  --card-bg:           #111318;
+  --card-bg-hover:     #13161d;
+  --card-border:       #1e2330;
+  --card-border-hover: #2a3050;
+  --card-text:         #8b92a5;
+  --card-text-strong:  #e2e6f0;
+  --card-accent-1:     #3b82f6;
+  --card-accent-2:     #6366f1;
+  --card-accent-3:     #8b5cf6;
+  --card-font:         "DM Sans", "Segoe UI", sans-serif;
+  --card-transition:   0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --card-radius:       10px;
+}
 
+/* ─── Card shell ──────────────────────────────────────────────────────────────── */
+.card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  max-width: 100%;
-  width: 230px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  cursor: pointer;
+  font-family: var(--card-font);
+  transition:
+    border-color  var(--card-transition),
+    box-shadow    var(--card-transition),
+    background    var(--card-transition);
 }
 
-/* HOVER EFFECT */
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
+  box-shadow:
+    0 0 0 1px rgba(99, 102, 241, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.45);
 }
 
-/* IMAGE SECTION */
+/* Gradient glow along top edge on hover */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--card-radius);
+  background: linear-gradient(
+    160deg,
+    rgba(59, 130, 246, 0.06) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity var(--card-transition);
+  pointer-events: none;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* ─── Tri-colour accent bar (matches Footer & Navbar) ────────────────────────── */
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--card-accent-1) 0%,
+    var(--card-accent-2) 50%,
+    var(--card-accent-3) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--card-transition);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* ─── Image area ──────────────────────────────────────────────────────────────── */
 .card-img {
-  height: 170px;
-  background: #f9fafb;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 10px;
+  justify-content: center;
+  background: #0d0f14;
+  border-bottom: 1px solid var(--card-border);
+  padding: 1.5rem;
+  height: 180px;
+  overflow: hidden;
+  transition: border-color var(--card-transition);
+}
+
+.card:hover .card-img {
+  border-color: var(--card-border-hover);
 }
 
 .card-img img {
-  max-height: 100%;
   max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  transition: transform 0.3s ease;
+  transition: transform var(--card-transition);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
 }
 
 .card:hover .card-img img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-/* BODY */
+/* ─── Body ────────────────────────────────────────────────────────────────────── */
 .card-body {
-  padding: 14px;
-  flex: 1; /* fill remaining space */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 1rem 1.1rem 1.1rem;
+  flex: 1;
 }
 
-/* TITLE */
+/* ─── Title ───────────────────────────────────────────────────────────────────── */
 .card-title {
-  font-size: 15px;
+  margin: 0;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #111827;
-  margin-bottom: 4px;
-  word-break: break-word;
+  color: var(--card-text-strong);
+  line-height: 1.35;
+  letter-spacing: 0.01em;
 }
 
-/* BRAND */
+/* ─── Brand ───────────────────────────────────────────────────────────────────── */
 .card-brand {
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: 10px;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, var(--card-accent-1), var(--card-accent-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* BUTTON */
-.view-btn {
+/* ─── Search highlight ────────────────────────────────────────────────────────── */
+.highlight {
+  background: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.25),
+    rgba(139, 92, 246, 0.25)
+  );
+  color: #c4d4ff;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────────── */
+.card-body .view-btn,
+.card-body .fav-btn {
+  display: block;
   width: 100%;
-  padding: 7px;
+  padding: 0.48rem 1rem;
+  font-family: var(--card-font);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   border: none;
-  border-radius: 8px;
-  background: #1f2937;
-  color: white;
-  font-size: 13px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    opacity      var(--card-transition),
+    box-shadow   var(--card-transition),
+    background   var(--card-transition);
+}
+
+/* Primary — View Details */
+.view-btn {
+  margin-top: 0.65rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--card-accent-1), var(--card-accent-3));
 }
 
 .view-btn:hover {
-  background: #293453;
+  opacity: 0.88;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.35);
 }
 
-.view-btn:active {
-  transform: scale(0.96);
+/* Secondary — Add to Favorites */
+.fav-btn {
+  color: var(--card-text);
+  background: transparent;
+  border: 1px solid var(--card-border);
+  transition:
+    color         var(--card-transition),
+    border-color  var(--card-transition),
+    background    var(--card-transition);
 }
 
-/* HIGHLIGHT TEXT */
-.highlight {
-  background: #fde68a;
-  padding: 0 3px;
-  border-radius: 4px;
+.fav-btn:hover {
+  color: var(--card-text-strong);
+  border-color: var(--card-border-hover);
+  background: rgba(59, 130, 246, 0.06);
 }
 
-/* ----------------- GRID LAYOUT ----------------- */
-.phone-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-  justify-items: center;
-}
-
-/* MOBILE RESPONSIVE */
-@media (max-width: 1024px) {
-  .phone-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .phone-grid {
-    grid-template-columns: 1fr; /* 1 card per row for mobile */
-  }
-
-  .card-img {
-    height: 150px; /* slightly smaller for mobile */
+/* ─── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card::before,
+  .card::after,
+  .card-img img,
+  .view-btn,
+  .fav-btn {
+    transition: none;
   }
 }

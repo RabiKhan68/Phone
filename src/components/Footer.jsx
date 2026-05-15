@@ -1,15 +1,45 @@
 import "./Footer.css";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+const FOOTER_LINKS = [
+  { label: "Privacy Policy",   href: "/privacy"  },
+  { label: "Terms of Service", href: "/terms"    },
+  { label: "Contact",          href: "/contact"  },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function Footer() {
   return (
     <footer className="footer">
+      {/* Decorative top border accent */}
+      <div className="footer-accent" aria-hidden="true">
+        <span /><span /><span />
+      </div>
+
       <div className="footer-container">
-        <p className="footer-text" style={{color: "white"}}>&copy; 2026 Phone Arena | Built by Rabi Khan</p>
-        <div className="footer-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Contact</a>
+        {/* Brand + copyright */}
+        <div className="footer-brand">
+          <span className="footer-logo" aria-hidden="true">📱</span>
+          <p className="footer-text">
+            &copy; {CURRENT_YEAR}{" "}
+            <strong className="footer-name">Phone Arena</strong>
+            <span className="footer-divider" aria-hidden="true"> · </span>
+            Built by <span className="footer-author">Rabi Khan</span>
+          </p>
         </div>
+
+        {/* Navigation */}
+        <nav className="footer-links" aria-label="Footer navigation">
+          {FOOTER_LINKS.map(({ label, href }) => (
+            <a key={label} href={href} className="footer-link">
+              {label}
+            </a>
+          ))}
+        </nav>
       </div>
     </footer>
   );

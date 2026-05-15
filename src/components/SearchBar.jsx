@@ -1,55 +1,67 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./SearchBar.css";
 
-function SearchBar({ onSearch }) {
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const DEBOUNCE_DELAY_MS = 400;
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
+  const inputRef = useRef(null);
 
-  // 🔥 Debounced search
+  // Debounced search
   useEffect(() => {
-    const delay = setTimeout(() => {
-      onSearch(query);
-    }, 400);
+  const delay = setTimeout(() => {
+    onSearch(query);
+    window.dispatchEvent(
+      new CustomEvent("phone-search", { detail: { query } })
+    );
+  }, DEBOUNCE_DELAY_MS);
+  return () => clearTimeout(delay);
+}, [query, onSearch]);
 
-    return () => clearTimeout(delay);
-  }, [query, onSearch]);
-
-  // 🔥 Clear input
-  const clearSearch = () => {
+  // Clear input and return focus to input
+  const clearSearch = useCallback(() => {
     setQuery("");
     onSearch("");
-  };
+    inputRef.current?.focus();
+  }, [onSearch]);
 
   return (
     <div className="search-container">
-
       <div className="search-box">
 
-        {/* ICON */}
-        <span className="search-icon">🔍</span>
+        {/* Icon */}
+        <span className="search-icon" aria-hidden="true">
+          <i className="ti ti-search" />
+        </span>
 
-        {/* INPUT */}
+        {/* Input */}
         <input
-          type="text"
+          ref={inputRef}
+          type="search"
           placeholder="Search phone model..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") clearSearch();
-          }}
+          onKeyDown={(e) => { if (e.key === "Escape") clearSearch(); }}
           className="search-input"
+          aria-label="Search phones"
         />
 
-        {/* CLEAR BUTTON */}
+        {/* Clear button */}
         {query && (
-          <button onClick={clearSearch} className="clear-btn">
+          <button
+            className="clear-btn"
+            onClick={clearSearch}
+            aria-label="Clear search"
+          >
             ✖
           </button>
         )}
 
       </div>
-
     </div>
   );
 }
-
-export default SearchBar;

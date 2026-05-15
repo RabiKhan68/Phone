@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "fast-average-color": "^9.5.0",
+    "firebase": "^12.13.0",
     "framer-motion": "^12.23.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
