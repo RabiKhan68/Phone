@@ -4555,6 +4555,36 @@
       }
     },
     {
+      "phone_name": "Samsung Galaxy S26 FE",
+      "brand": "Samsung",
+      "image": "https://fdn2.gsmarena.com/vv/bigpic/samsung-samsung-galaxy-s26-fe.jpg",
+      "specs": {
+        "Technology": "GSM / HSPA / LTE / 5G",
+        "2G bands": "GSM 850 / 900 / 1800 / 1900",
+        "3G bands": "HSDPA 850 / 900 / 1700 / 1900 / 2100",
+        "4G bands": "1, 2, 3, 4, 5, 7, 8, 12, 13, 17, 18, 19, 20, 25, 26, 28, 32, 38, 39, 40, 41, 66",
+        "": "1, 2, 3, 4, 5, 7, 8, 12, 13, 14, 18, 19, 20, 25, 26, 28, 29, 30, 38, 39, 40, 41, 48, 66, 71",
+        "5G bands": "1, 3, 5, 7, 8, 28, 40, 77, 78",
+        "": "1, 7, 25, 28, 41, 66, 71, 78, 257, 258, 260, 261",
+        "Announced": "2026, August",
+        "Status": "Available",
+        "Dimensions": "161.6 x 76.9 x 7.4 mm",
+        "Weight": "193 g",
+        "Display": "6.7 inches Dynamic LTPO AMOLED 2X, 1080 x 2340 pixels",
+        "OS": "Android 17, upgradable to Android 24, One UI 16",
+        "CPU": "3.3 GHz",
+        "Chipset": "Exynos 2500",
+        "Memory": "128/256/512 GB",
+        "RAM": "8 GB",
+        "Main Camera": "50 MP + 8 MP (Telephoto) + 12 (UW)",
+        "Video back": "8K 24/30fps 4K 30/60/120fps 1080p 30/60fps",
+        "Selfie Camera": "12 MP",
+        "Video front": "4K 30/60fps 1080p 30/60fps",
+        "Battery": "Si/C Li-Ion 4900 mAh, non-removable",
+        "Price": "About 699 EUR"
+      }
+    },
+    {
       "phone_name": "Oneplus One",
       "brand": "Oneplus",
       "image": "https://fdn2.gsmarena.com/vv/bigpic/oneplus-one.jpg",
